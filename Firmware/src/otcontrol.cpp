@@ -576,9 +576,12 @@ void OTControl::OnRxMaster(const unsigned long msg, const OpenThermResponseStatu
         setOtValue(otval, mt, newMsg & 0xFFFF);
     else {
         if (mt == OpenThermMessageType::READ_ACK) {
+            // report unknown ids only once, not on every cycle
+            if (extraValues.find(id) == extraValues.end())
+                portal.textAll(String(F("no slave val for ID ")) + String((int) id));
             extraValues[id] = msg & 0xFFFF;
-            portal.textAll(F("no slave val!"));
         }
+
     }
 
     otval = OTValue::getMasterValue(id);
