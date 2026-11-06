@@ -3385,8 +3385,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="param">
+                    <h5>add setpoint steps to integrator</h5>
+                    <div class="infobox">
+                        When enabled (default), a change of the room setpoint is also added to the integrator. As the room setpoint already shifts the heating curve, this doubles the effect of a setpoint step (e.g. night setback).
+                    </div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" field="heating.$.roomComp.spFeedFwd" />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
 
                 <h4>Suspend on room setpoint</h4>
+
                 <div class="flexline">
                     <div class="param">
                         <h5>enable</h5>
@@ -4513,7 +4526,8 @@
                         enabled: false,
                         p: 1.0,
                         i: 0.5,
-                        boost: 1
+                        boost: 1,
+                        spFeedFwd: true
                     },
                     chOn: true,
                     flowMax: 60,
@@ -4553,7 +4567,8 @@
                         enabled: false,
                         p: 1.0,
                         i: 0.0,
-                        boost: 1
+                        boost: 1,
+                        spFeedFwd: true
                     },
                     chOn: false,
                     flowMax: 40,

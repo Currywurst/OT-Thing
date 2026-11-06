@@ -29,6 +29,7 @@ void CHcontrol::setConfig(JsonObject &obj, const bool init) {
     config.roomComp.p = rc[F("p")] | 0.0;
     config.roomComp.i = rc[F("i")] | 0.0;
     config.roomComp.boost = rc[F("boost")] | 3.0;
+    config.roomComp.spFeedFwd = rc[F("spFeedFwd")] | true;
     
     config.roomSuspend.hysteresis = obj[FPSTR(STR_CONFKEY_HYSTERESIS)] | 0.2;
     config.roomSuspend.offset = obj[F("suspOffset")] | 0.0;
@@ -383,8 +384,12 @@ void CHcontrol::loopRoomComp() {
     double p = config.roomComp.p * e; // Kp * e
     
     // integral part of PI controller
-    roomComp.integState += rsp - roomComp.rspPrev;
+    // the room setpoint already shifts the heating curve, adding the step to
+    // the integrator as well doubles its effect, so this is optional
+    if (config.roomComp.spFeedFwd)
+        roomComp.integState += rsp - roomComp.rspPrev;
     roomComp.rspPrev = rsp;
+
     if (chOn) {
         if (e > 0)
             roomComp.integState += config.roomComp.i * e * PI_INTERVAL / 3600.0; // Ki * e * ts, ts = 30 s

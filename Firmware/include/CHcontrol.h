@@ -35,6 +35,8 @@ private:
             double p; // Kp K/K
             double i; // Ki 1/h
             double boost; // Kb K/K
+            bool spFeedFwd; // add room setpoint steps to integrator
+
         } roomComp;
         bool minSuspend;
         double minSuspendHyst;
